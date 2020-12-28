@@ -16,14 +16,15 @@
   },
   "repository": "github:flancer32/teq_acl",
   "scripts": {},
-  "dependencies": {
-    "@flancer32/teq_user": "github:flancer32/teq_user"
-  },
+  "dependencies": {},
   "devDependencies": {},
   "teqfw": {
     "autoload": {
       "ns": "Fl32_Teq_Acl",
       "path": "./src"
+    },
+    "dependencies": {
+      "@flancer32/teq_user": "github:flancer32/teq_user"
     }
   }
 }
