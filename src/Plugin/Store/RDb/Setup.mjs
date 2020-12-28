@@ -34,34 +34,7 @@ export default class Fl32_Teq_Acl_Plugin_Store_RDb_Setup {
         };
 
         this.initData = async function (knex, trx) {
-            // permissions
-            await trx(ePerm.ENTITY).insert([
-                {[ePerm.A_ID]: 1, [ePerm.A_CODE]: 'user/authenticated'},
-                {[ePerm.A_ID]: 2, [ePerm.A_CODE]: 'user/manager'},
-                {[ePerm.A_ID]: 3, [ePerm.A_CODE]: 'user/developer'},
-            ]);
-            // roles
-            await trx(eRole.ENTITY).insert([
-                {[eRole.A_ID]: 1, [eRole.A_CODE]: 'authenticated'},
-                {[eRole.A_ID]: 2, [eRole.A_CODE]: 'manager'},
-            ]);
-            // permissions for roles
-            await trx(eRolePerm.ENTITY).insert([
-                {[eRolePerm.A_ROLE_REF]: 1, [eRolePerm.A_PERM_REF]: 1},
-                {[eRolePerm.A_ROLE_REF]: 2, [eRolePerm.A_PERM_REF]: 2},
-            ]);
-            // users for roles
-            await trx(eRoleUser.ENTITY).insert([
-                {[eRoleUser.A_ROLE_REF]: 1, [eRoleUser.A_USER_REF]: 1},
-                {[eRoleUser.A_ROLE_REF]: 1, [eRoleUser.A_USER_REF]: 2},
-                {[eRoleUser.A_ROLE_REF]: 2, [eRoleUser.A_USER_REF]: 2},
-            ]);
-            // individual permissions
-            await trx(ePermUser.ENTITY).insert([
-                {[ePermUser.A_PERM_REF]: 1, [ePermUser.A_USER_REF]: 3},
-                {[ePermUser.A_PERM_REF]: 2, [ePermUser.A_USER_REF]: 3},
-                {[ePermUser.A_PERM_REF]: 3, [ePermUser.A_USER_REF]: 3},
-            ]);
+
         };
 
         /**
