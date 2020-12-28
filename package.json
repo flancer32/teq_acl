@@ -1,0 +1,29 @@
+{
+  "name": "@flancer32/teq_acl",
+  "version": "0.0.1",
+  "private": true,
+  "description": "ACL plugin for Tequila based projects.",
+  "homepage": "https://github.com/flancer32/teq_acl/",
+  "bugs": {
+    "url": "https://github.com/flancer32/teq_acl/issues",
+    "email": "alex@flancer32.com"
+  },
+  "license": "GPL-3.0",
+  "author": {
+    "name": "Alex Gusev",
+    "email": "alex@flancer64.com",
+    "url": "https://github.com/flancer64"
+  },
+  "repository": "github:flancer32/teq_acl",
+  "scripts": {},
+  "dependencies": {
+    "@flancer32/teq_user": "github:flancer32/teq_user"
+  },
+  "devDependencies": {},
+  "teqfw": {
+    "autoload": {
+      "ns": "Fl32_Teq_Acl",
+      "path": "./src"
+    }
+  }
+}
