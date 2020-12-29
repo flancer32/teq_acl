@@ -38,6 +38,23 @@ export default class Fl32_Teq_Acl_App_Server_Permissions {
             // DEFINE INNER FUNCTIONS
 
             /**
+             * Extract session ID from cookies or HTTP headers.
+             * @param {IncomingMessage} req
+             * @return {null}
+             */
+            function extractSessionId(req) {
+                let result = null;
+                if (req.cookies && req.cookies[DEF_USER.SESSION_COOKIE_NAME]) {
+                    // there is session cookie in request
+                    result = req.cookies[DEF_USER.SESSION_COOKIE_NAME];
+                } else if (req.headers && req.headers.authorization) {
+                    const value = req.headers.authorization;
+                    result = value.replace('Bearer ', '').trim();
+                }
+                return result;
+            }
+
+            /**
              * @param trx
              * @param {Number} userId
              * @return {Promise<Fl32_Teq_User_Shared_Service_Data_User|null>}
@@ -66,6 +83,12 @@ export default class Fl32_Teq_Acl_App_Server_Permissions {
                 return result;
             }
 
+            /**
+             * Get all user's permissions as object {id => code}.
+             * @param trx
+             * @param {Number} userId
+             * @return {Promise<Object<Number, String>>}
+             */
             async function getPermissions(trx, userId) {
                 // DEFINE INNER FUNCTIONS
 
@@ -114,7 +137,7 @@ export default class Fl32_Teq_Acl_App_Server_Permissions {
                 }
 
                 // MAIN FUNCTIONALITY
-                const result = [];
+                const result = {};
                 const permRoles = await getRolesPermissions(trx, userId);
                 const permUser = await getUserPermissions(trx, userId);
                 permRoles.forEach((one) => result[one[Permission.A_ID]] = one[Permission.A_CODE]);
@@ -123,9 +146,9 @@ export default class Fl32_Teq_Acl_App_Server_Permissions {
             }
 
             // MAIN FUNCTIONALITY
-            if (req.cookies && req.cookies[DEF_USER.SESSION_COOKIE_NAME]) {
-                // there is session cookie in request
-                const sessId = req.cookies[DEF_USER.SESSION_COOKIE_NAME];
+            const sessId = extractSessionId(req);
+            if (sessId) {
+                // get ACL asynchronously
                 rdb.startTransaction()
                     .then(async (trx) => {
                         try {
@@ -148,7 +171,7 @@ export default class Fl32_Teq_Acl_App_Server_Permissions {
                         next();
                     });
             } else {
-                // there is no session cookie in request, just continue
+                // there is no session ID in request, just continue synchronously
                 next();
             }
         };

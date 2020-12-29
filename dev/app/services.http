@@ -1,0 +1,11 @@
+
+###
+POST https://{{host}}/api/acl/user/get
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{sessionId}}
+
+
+{"data": {}}
+
+###
