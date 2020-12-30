@@ -6,7 +6,7 @@ export default function (spec) {
     /** @type {typeof Fl32_Teq_User_Shared_Service_Data_User} */
     const User = spec['Fl32_Teq_User_Shared_Service_Data_User#']; // class constructor
     /** @type {typeof Fl32_Teq_Acl_Shared_Service_Route_User_Get_Response} */
-    const Response = spec['Fl32_Teq_Acl_Shared_Service_Route_User_Get_#Response']; // class constructor
+    const Response = spec['Fl32_Teq_Acl_Shared_Service_Route_User_Get#Response']; // class constructor
     /** @type {typeof TeqFw_Core_Front_Gate_Response_Error} */
     const GateError = spec['TeqFw_Core_Front_Gate_Response_Error#'];    // class constructor
 
