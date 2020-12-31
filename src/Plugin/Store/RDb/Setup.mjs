@@ -32,10 +32,6 @@ export default class Fl32_Teq_Acl_Plugin_Store_RDb_Setup {
             schema.dropTableIfExists(eRoleUser.ENTITY);
         };
 
-        this.initData = async function (knex, trx) {
-
-        };
-
         /**
          * Upgrade database structure (drop/create tables).
          *
