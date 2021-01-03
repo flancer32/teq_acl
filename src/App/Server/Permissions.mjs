@@ -100,9 +100,8 @@ export default class Fl32_Teq_Acl_App_Server_Permissions {
                     .then(async (trx) => {
                         try {
                             const perms = await getPermissions(trx, user.id);
-                            const userAcl = new UserAcl();
+                            const userAcl = Object.assign(new UserAcl(), user);
                             userAcl.permissions = perms;
-                            userAcl.user = user;
                             req[DEF_USER.HTTP_REQ_USER] = userAcl;
                             await trx.commit();
                         } catch (e) {
