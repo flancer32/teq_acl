@@ -10,7 +10,7 @@ export default function (spec) {
     /** @type {typeof TeqFw_Core_App_Front_Gate_Response_Error} */
     const GateError = spec['TeqFw_Core_App_Front_Gate_Response_Error#'];    // class constructor
 
-    // TODO: we need to map gate to APU URI
+    // TODO: we need to map gate to API URI
     const URL = `https://${config.web.urlBase}/api/acl/user/get`;
 
     /**
