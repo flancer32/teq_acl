@@ -5,17 +5,17 @@ export default class Fl32_Teq_Acl_App_Server_Permissions {
 
     constructor(spec) {
         /** @type {Fl32_Teq_User_Defaults} */
-        const DEF_USER = spec.Fl32_Teq_User_Defaults$;  // singleton instance
+        const DEF_USER = spec.Fl32_Teq_User_Defaults$;  // singleton class instance
         /** @type {TeqFw_Core_App_Db_Connector} */
-        const rdb = spec.TeqFw_Core_App_Db_Connector$;  // singleton instance
+        const rdb = spec.TeqFw_Core_App_Db_Connector$;  // singleton class instance
         /** @type {Fl32_Teq_Acl_Store_RDb_Schema_Permission} */
-        const ePerm = spec.Fl32_Teq_Acl_Store_RDb_Schema_Permission$;    // singleton instance
+        const ePerm = spec.Fl32_Teq_Acl_Store_RDb_Schema_Permission$;    // singleton class instance
         /** @type {Fl32_Teq_Acl_Store_RDb_Schema_Perm_User} */
-        const ePermUser = spec.Fl32_Teq_Acl_Store_RDb_Schema_Perm_User$;    // singleton instance
+        const ePermUser = spec.Fl32_Teq_Acl_Store_RDb_Schema_Perm_User$;    // singleton class instance
         /** @type {Fl32_Teq_Acl_Store_RDb_Schema_Role_Perm} */
-        const eRolePerm = spec.Fl32_Teq_Acl_Store_RDb_Schema_Role_Perm$;    // singleton instance
+        const eRolePerm = spec.Fl32_Teq_Acl_Store_RDb_Schema_Role_Perm$;    // singleton class instance
         /** @type {Fl32_Teq_Acl_Store_RDb_Schema_Role_User} */
-        const eRoleUser = spec.Fl32_Teq_Acl_Store_RDb_Schema_Role_User$;    // singleton instance
+        const eRoleUser = spec.Fl32_Teq_Acl_Store_RDb_Schema_Role_User$;    // singleton class instance
         /** @type {typeof Fl32_Teq_Acl_Shared_Service_Data_Permission} */
         const Permission = spec['Fl32_Teq_Acl_Shared_Service_Data_Permission#'];  // class constructor
         /** @type {typeof Fl32_Teq_Acl_Shared_Service_Data_UserAcl} */
