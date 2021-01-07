@@ -30,7 +30,7 @@ export default class Fl32_Teq_Acl_Front_App_Session {
          * Redirect to sign in route if user in session has no given permission.
          * @param {Object} router Vue Router
          * @param {String} perm
-         * @return {Promise<void>}
+         * @return {Promise<Boolean>} 'true' if user has requested permission
          */
         this.redirectOnFail = async function (router, perm) {
             if (!this.hasPermission(perm)) {
@@ -38,6 +38,9 @@ export default class Fl32_Teq_Acl_Front_App_Session {
                 this.setRouteToRedirect(routeCurrent);
                 const routeSignIn = this.getRouteToSignIn() ?? DEF_USER.ROUTE_SIGN_IN;
                 await router.push(routeSignIn);
+                return false;
+            } else {
+                return true;
             }
         };
     }
