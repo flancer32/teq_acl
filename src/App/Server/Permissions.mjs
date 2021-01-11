@@ -1,21 +1,23 @@
 /**
- * Middleware to load user permissions by sessionId.
+ * Middleware to load user permissions by userId.
  */
 export default class Fl32_Teq_Acl_App_Server_Permissions {
 
     constructor(spec) {
         /** @type {Fl32_Teq_User_Defaults} */
-        const DEF_USER = spec.Fl32_Teq_User_Defaults$;  // singleton instance
+        const DEF_USER = spec['Fl32_Teq_User_Defaults$'];  // singleton instance
+        /** @type {Fl32_Teq_Acl_App_Cache_Permissions} */
+        const cache = spec['Fl32_Teq_Acl_App_Cache_Permissions$'];  // singleton instance
         /** @type {TeqFw_Core_App_Db_Connector} */
-        const rdb = spec.TeqFw_Core_App_Db_Connector$;  // singleton instance
+        const rdb = spec['TeqFw_Core_App_Db_Connector$'];  // singleton instance
         /** @type {Fl32_Teq_Acl_Store_RDb_Schema_Permission} */
-        const ePerm = spec.Fl32_Teq_Acl_Store_RDb_Schema_Permission$;    // singleton instance
+        const ePerm = spec['Fl32_Teq_Acl_Store_RDb_Schema_Permission$'];    // singleton instance
         /** @type {Fl32_Teq_Acl_Store_RDb_Schema_Perm_User} */
-        const ePermUser = spec.Fl32_Teq_Acl_Store_RDb_Schema_Perm_User$;    // singleton instance
+        const ePermUser = spec['Fl32_Teq_Acl_Store_RDb_Schema_Perm_User$'];    // singleton instance
         /** @type {Fl32_Teq_Acl_Store_RDb_Schema_Role_Perm} */
-        const eRolePerm = spec.Fl32_Teq_Acl_Store_RDb_Schema_Role_Perm$;    // singleton instance
+        const eRolePerm = spec['Fl32_Teq_Acl_Store_RDb_Schema_Role_Perm$'];    // singleton instance
         /** @type {Fl32_Teq_Acl_Store_RDb_Schema_Role_User} */
-        const eRoleUser = spec.Fl32_Teq_Acl_Store_RDb_Schema_Role_User$;    // singleton instance
+        const eRoleUser = spec['Fl32_Teq_Acl_Store_RDb_Schema_Role_User$'];    // singleton instance
         /** @type {typeof Fl32_Teq_Acl_Shared_Service_Data_Permission} */
         const Permission = spec['Fl32_Teq_Acl_Shared_Service_Data_Permission#'];  // class constructor
         /** @type {typeof Fl32_Teq_Acl_Shared_Service_Data_UserAcl} */
@@ -95,28 +97,36 @@ export default class Fl32_Teq_Acl_App_Server_Permissions {
             if (req[DEF_USER.HTTP_REQ_USER]) {
                 /** @type {Fl32_Teq_User_Shared_Service_Data_User} */
                 const user = req[DEF_USER.HTTP_REQ_USER];
-                // get ACL asynchronously
-                rdb.startTransaction()
-                    .then(async (trx) => {
-                        try {
-                            const perms = await getPermissions(trx, user.id);
-                            const userAcl = Object.assign(new UserAcl(), user);
-                            userAcl.permissions = perms;
-                            req[DEF_USER.HTTP_REQ_USER] = userAcl;
-                            await trx.commit();
-                        } catch (e) {
-                            await trx.rollback();
-                            console.log('ACL middleware RDB exception: ' + e.message);
-                        }
-                        next();
-                    })
-                    .catch((e) => {
-                        console.log('ACL middleware exception: ' + e.message);
-                        next();
-                    });
+                // get ACL from cache
+                const perms = cache.get(user.id);
+                if (perms) {
+                    const userAcl = Object.assign(new UserAcl(), user);
+                    userAcl.permissions = perms;
+                    req[DEF_USER.HTTP_REQ_USER] = userAcl;
+                    next(); // continue synchronously
+                } else {
+                    // get ACL asynchronously
+                    rdb.startTransaction()
+                        .then(async (trx) => {
+                            try {
+                                const perms = await getPermissions(trx, user.id);
+                                const userAcl = Object.assign(new UserAcl(), user);
+                                userAcl.permissions = perms;
+                                req[DEF_USER.HTTP_REQ_USER] = userAcl;
+                                await trx.commit();
+                            } catch (e) {
+                                await trx.rollback();
+                                console.log('ACL middleware RDB exception: ' + e.message);
+                            }
+                            next();
+                        })
+                        .catch((e) => {
+                            console.error('ACL middleware exception: ' + e.message);
+                            next();
+                        });
+                }
             } else {
-                // there is no session ID in request, just continue synchronously
-                next();
+                next(); // there is no user data in request, just continue synchronously
             }
         };
     }
