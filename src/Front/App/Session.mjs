@@ -32,7 +32,7 @@ export default class Fl32_Teq_Acl_Front_App_Session {
          * @param {String} perm
          * @return {Promise<Boolean>} 'true' if user has requested permission
          */
-        this.redirectOnFail = async function (router, perm) {
+        this.isAccessGranted = async function (router, perm) {
             if (!this.hasPermission(perm)) {
                 const routeCurrent = router.currentRoute.value.path;
                 this.setRouteToRedirect(routeCurrent);
