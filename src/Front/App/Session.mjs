@@ -36,6 +36,7 @@ export default class Fl32_Teq_Acl_Front_App_Session {
             if (!this.hasPermission(perm)) {
                 const routeCurrent = router.currentRoute.value.path;
                 this.setRouteToRedirect(routeCurrent);
+                // TODO: we should not use user plugin's route, we need use app route instead
                 const routeSignIn = this.getRouteToSignIn() ?? DEF_USER.ROUTE_SIGN_IN;
                 await router.push(routeSignIn);
                 return false;
